@@ -1,0 +1,1088 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+R > if (grepl("savio2", Sys.info()["nodename"])) {
+...   .libPaths("/global/scratch/nhejazi/R")
+...   Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")
+... }
+R > 
+R > # set CRAN mirror
+R > options(repos = structure(c(CRAN = "https://cran.rstudio.com/")))
+R > 
+R > # lie to pkgbuild, as per Jeremy
+R > pkgbuild:::cache_set("has_compiler", TRUE)
+R > 
+R > # from CRAN
+R > install.packages(c("R.utils", "Rcpp", "here", "remotes", "devtools",
+...                    "BiocManager", "tidyverse", "data.table", "Rsolnp", "nnls",
+...                    "foreach", "doRNG", "future", "future.apply", "doFuture",
+...                    "mvtnorm", "glmnet", "randomForest", "earth", "arm", "gam",
+...                    "e1071", "xgboost", "speedglm", "SuperLearner", "drtmle"),
+...                    lib = "/global/scratch/nhejazi/R")
+trying URL 'https://cran.rstudio.com/src/contrib/R.utils_2.9.2.tar.gz'
+Content type 'application/x-gzip' length 361955 bytes (353 KB)
+==================================================
+downloaded 353 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/Rcpp_1.0.3.tar.gz'
+Content type 'application/x-gzip' length 2749025 bytes (2.6 MB)
+==================================================
+downloaded 2.6 MB
+
+trying URL 'https://cran.rstudio.com/src/contrib/here_0.1.tar.gz'
+Content type 'application/x-gzip' length 3607 bytes
+==================================================
+downloaded 3607 bytes
+
+trying URL 'https://cran.rstudio.com/src/contrib/remotes_2.1.0.tar.gz'
+Content type 'application/x-gzip' length 131622 bytes (128 KB)
+==================================================
+downloaded 128 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/devtools_2.2.1.tar.gz'
+Content type 'application/x-gzip' length 372273 bytes (363 KB)
+==================================================
+downloaded 363 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/BiocManager_1.30.10.tar.gz'
+Content type 'application/x-gzip' length 40205 bytes (39 KB)
+==================================================
+downloaded 39 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/tidyverse_1.3.0.tar.gz'
+Content type 'application/x-gzip' length 712837 bytes (696 KB)
+==================================================
+downloaded 696 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/data.table_1.12.8.tar.gz'
+Content type 'application/x-gzip' length 4948391 bytes (4.7 MB)
+==================================================
+downloaded 4.7 MB
+
+trying URL 'https://cran.rstudio.com/src/contrib/Rsolnp_1.16.tar.gz'
+Content type 'application/x-gzip' length 188216 bytes (183 KB)
+==================================================
+downloaded 183 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/nnls_1.4.tar.gz'
+Content type 'application/x-gzip' length 10538 bytes (10 KB)
+==================================================
+downloaded 10 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/foreach_1.4.7.tar.gz'
+Content type 'application/x-gzip' length 359074 bytes (350 KB)
+==================================================
+downloaded 350 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/doRNG_1.7.1.tar.gz'
+Content type 'application/x-gzip' length 261238 bytes (255 KB)
+==================================================
+downloaded 255 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/future_1.15.1.tar.gz'
+Content type 'application/x-gzip' length 300576 bytes (293 KB)
+==================================================
+downloaded 293 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/future.apply_1.3.0.tar.gz'
+Content type 'application/x-gzip' length 52991 bytes (51 KB)
+==================================================
+downloaded 51 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/doFuture_0.8.2.tar.gz'
+Content type 'application/x-gzip' length 44536 bytes (43 KB)
+==================================================
+downloaded 43 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/mvtnorm_1.0-11.tar.gz'
+Content type 'application/x-gzip' length 160498 bytes (156 KB)
+==================================================
+downloaded 156 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/randomForest_4.6-14.tar.gz'
+Content type 'application/x-gzip' length 80074 bytes (78 KB)
+==================================================
+downloaded 78 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/earth_5.1.2.tar.gz'
+Content type 'application/x-gzip' length 1473541 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+trying URL 'https://cran.rstudio.com/src/contrib/arm_1.10-1.tar.gz'
+Content type 'application/x-gzip' length 78301 bytes (76 KB)
+==================================================
+downloaded 76 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/gam_1.16.1.tar.gz'
+Content type 'application/x-gzip' length 121740 bytes (118 KB)
+==================================================
+downloaded 118 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/e1071_1.7-3.tar.gz'
+Content type 'application/x-gzip' length 582517 bytes (568 KB)
+==================================================
+downloaded 568 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/xgboost_0.90.0.2.tar.gz'
+Content type 'application/x-gzip' length 845867 bytes (826 KB)
+==================================================
+downloaded 826 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/speedglm_0.3-2.tar.gz'
+Content type 'application/x-gzip' length 29714 bytes (29 KB)
+==================================================
+downloaded 29 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/SuperLearner_2.0-26.tar.gz'
+Content type 'application/x-gzip' length 523618 bytes (511 KB)
+==================================================
+downloaded 511 KB
+
+trying URL 'https://cran.rstudio.com/src/contrib/drtmle_1.0.4.tar.gz'
+Content type 'application/x-gzip' length 904879 bytes (883 KB)
+==================================================
+downloaded 883 KB
+
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'R.utils' ...
+** package 'R.utils' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Warning in setGenericS3.default(name, export = exportGeneric, envir = envir,  :
+  Renamed the preexisting function warnings to warnings.default, which was defined in environment base.
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (R.utils)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'Rcpp' ...
+** package 'Rcpp' successfully unpacked and MD5 sums checked
+** libs
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c api.cpp -o api.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c attributes.cpp -o attributes.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c barrier.cpp -o barrier.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c date.cpp -o date.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c module.cpp -o module.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I../inst/include/  -I/usr/local/include   -fpic  -g -O2  -c rcpp_init.cpp -o rcpp_init.o
+g++ -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o Rcpp.so api.o attributes.o barrier.o date.o module.o rcpp_init.o -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/Rcpp/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (Rcpp)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'here' ...
+** package 'here' successfully unpacked and MD5 sums checked
+** R
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (here)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+ERROR: failed to lock directory '/global/scratch/nhejazi/R' for modifying
+Try removing '/global/scratch/nhejazi/R/00LOCK-remotes'
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'BiocManager' ...
+** package 'BiocManager' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (BiocManager)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'tidyverse' ...
+** package 'tidyverse' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (tidyverse)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+ERROR: failed to lock directory '/global/scratch/nhejazi/R' for modifying
+Try removing '/global/scratch/nhejazi/R/00LOCK-data.table'
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'Rsolnp' ...
+** package 'Rsolnp' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (Rsolnp)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'nnls' ...
+** package 'nnls' successfully unpacked and MD5 sums checked
+** libs
+f95   -fpic  -g -O2  -c lawson_hanson_nnls.f -o lawson_hanson_nnls.o
+f95   -fpic  -g -O2  -c nnnpls.f -o nnnpls.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o nnls.so lawson_hanson_nnls.o nnnpls.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/nnls/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (nnls)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'foreach' ...
+** package 'foreach' successfully unpacked and MD5 sums checked
+** R
+** demo
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (foreach)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'future' ...
+** package 'future' successfully unpacked and MD5 sums checked
+** R
+** demo
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (future)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'mvtnorm' ...
+** package 'mvtnorm' successfully unpacked and MD5 sums checked
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c C_FORTRAN_interface.c -o C_FORTRAN_interface.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c miwa.c -o miwa.o
+f95   -fpic  -g -O2  -c mvt.f -o mvt.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c mvtnorm-init.c -o mvtnorm-init.o
+f95   -fpic  -g -O2  -c tvpack.f -o tvpack.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o mvtnorm.so C_FORTRAN_interface.o miwa.o mvt.o mvtnorm-init.o tvpack.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/mvtnorm/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (mvtnorm)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'randomForest' ...
+** package 'randomForest' successfully unpacked and MD5 sums checked
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c classTree.c -o classTree.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c init.c -o init.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c regTree.c -o regTree.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c regrf.c -o regrf.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c rf.c -o rf.o
+f95   -fpic  -g -O2  -c rfsub.f -o rfsub.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c rfutils.c -o rfutils.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o randomForest.so classTree.o init.o regTree.o regrf.o rf.o rfsub.o rfutils.o -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/randomForest/libs
+** R
+** data
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (randomForest)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'earth' ...
+** package 'earth' successfully unpacked and MD5 sums checked
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c allowed.c -o allowed.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c earth.c -o earth.o
+f95   -fpic  -g -O2  -c leaps.f -o leaps.o
+f95   -fpic  -g -O2  -c leapshdr.f -o leapshdr.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c rentries.c -o rentries.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o earth.so allowed.o earth.o leaps.o leapshdr.o rentries.o -Wl,--no-as-needed -lmkl_gf_lp64 -Wl,--start-group -lmkl_gnu_thread -lmkl_core -Wl,--end-group -fopenmp -ldl -lpthread -lm -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/earth/libs
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (earth)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'arm' ...
+** package 'arm' successfully unpacked and MD5 sums checked
+** R
+** data
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (arm)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'e1071' ...
+** package 'e1071' successfully unpacked and MD5 sums checked
+checking for C++ compiler default output file name... a.out
+checking whether the C++ compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether g++ accepts -g... yes
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c Rsvm.c -o Rsvm.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c cmeans.c -o cmeans.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c cshell.c -o cshell.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c floyd.c -o floyd.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c init.c -o init.o
+g++  -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -g -O2  -c svm.cpp -o svm.o
+g++ -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o e1071.so Rsvm.o cmeans.o cshell.o floyd.o init.o svm.o -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/e1071/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (e1071)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'speedglm' ...
+** package 'speedglm' successfully unpacked and MD5 sums checked
+** R
+** data
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (speedglm)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'devtools' ...
+** package 'devtools' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (devtools)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'doRNG' ...
+** package 'doRNG' successfully unpacked and MD5 sums checked
+** R
+** demo
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (doRNG)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'future.apply' ...
+** package 'future.apply' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (future.apply)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'doFuture' ...
+** package 'doFuture' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (doFuture)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'gam' ...
+** package 'gam' successfully unpacked and MD5 sums checked
+** libs
+f95   -fpic  -g -O2  -c backfit.f -o backfit.o
+f95   -fpic  -g -O2  -c backlo.f -o backlo.o
+f95   -fpic  -g -O2  -c bsplvd.f -o bsplvd.o
+f95   -fpic  -g -O2  -c bvalue.f -o bvalue.o
+f95   -fpic  -g -O2  -c bvalus.f -o bvalus.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c gam_init.c -o gam_init.o
+f95   -fpic  -g -O2  -c linear.f -o linear.o
+f95   -fpic  -g -O2  -c lo.f -o lo.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c loessc.c -o loessc.o
+f95   -fpic  -g -O2  -c loessf.f -o loessf.o
+f95   -fpic  -g -O2  -c qsbart.f -o qsbart.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c sbart.c -o sbart.o
+f95   -fpic  -g -O2  -c sgram.f -o sgram.o
+f95   -fpic  -g -O2  -c sinerp.f -o sinerp.o
+f95   -fpic  -g -O2  -c splsm.f -o splsm.o
+f95   -fpic  -g -O2  -c sslvrg.f -o sslvrg.o
+f95   -fpic  -g -O2  -c stxwx.f -o stxwx.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o gam.so backfit.o backlo.o bsplvd.o bvalue.o bvalus.o gam_init.o linear.o lo.o loessc.o loessf.o qsbart.o sbart.o sgram.o sinerp.o splsm.o sslvrg.o stxwx.o -Wl,--no-as-needed -lmkl_gf_lp64 -Wl,--start-group -lmkl_gnu_thread -lmkl_core -Wl,--end-group -fopenmp -ldl -lpthread -lm -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/usr/lib/gcc/x86_64-redhat-linux/4.8.2 -lgfortran -lm -lquadmath -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/gam/libs
+** R
+** data
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (gam)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'xgboost' ...
+** package 'xgboost' successfully unpacked and MD5 sums checked
+configure: creating ./config.status
+config.status: creating src/Makevars
+** libs
+Makevars:17: -DXGBOOST_STRICT_R_MODE=1
+Makevars:17: -DDMLC_LOG_BEFORE_THROW=0
+Makevars:17: -DDMLC_ENABLE_STD_THREAD=0
+Makevars:17: -DDMLC_DISABLE_STDIN=1
+Makevars:17: -DDMLC_LOG_CUSTOMIZE=1
+Makevars:17: -DXGBOOST_CUSTOMIZE_LOGGER=1
+Makevars:17: -DRABIT_CUSTOMIZE_MSG_
+Makevars:17: -DRABIT_STRICT_CXX98_
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c xgboost_R.cc -o xgboost_R.o
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c xgboost_custom.cc -o xgboost_custom.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include   -fpic  -std=gnu99 -c xgboost_assert.c -o xgboost_assert.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include   -fpic  -std=gnu99 -c init.c -o init.o
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c amalgamation/xgboost-all0.cc -o amalgamation/xgboost-all0.o
+In file included from amalgamation/xgboost-all0.cc:64:0:
+amalgamation/../src/learner.cc:111:8: warning: 'xgboost::LearnerTrainParam' has a field 'xgboost::LearnerTrainParam::dsplit' whose type uses the anonymous namespace [-Wsubobject-linkage]
+ struct LearnerTrainParam : public dmlc::Parameter<LearnerTrainParam> {
+        ^~~~~~~~~~~~~~~~~
+amalgamation/../src/learner.cc:111:8: warning: 'xgboost::LearnerTrainParam' has a field 'xgboost::LearnerTrainParam::tree_method' whose type uses the anonymous namespace [-Wsubobject-linkage]
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c amalgamation/dmlc-minimum0.cc -o amalgamation/dmlc-minimum0.o
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c rabit/src/engine_empty.cc -o rabit/src/engine_empty.o
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG -I./include -I./dmlc-core/include -I./rabit/include -I. -DXGBOOST_STRICT_R_MODE=1 -DDMLC_LOG_BEFORE_THROW=0 -DDMLC_ENABLE_STD_THREAD=0 -DDMLC_DISABLE_STDIN=1 -DDMLC_LOG_CUSTOMIZE=1 -DXGBOOST_CUSTOMIZE_LOGGER=1 -DRABIT_CUSTOMIZE_MSG_ -DRABIT_STRICT_CXX98_  -I/usr/local/include  -fopenmp -pthread -fpic  -g -O2 -c rabit/src/c_api.cc -o rabit/src/c_api.o
+g++ -std=gnu++11 -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o xgboost.so ./xgboost_R.o ./xgboost_custom.o ./xgboost_assert.o ./init.o ./amalgamation/xgboost-all0.o ./amalgamation/dmlc-minimum0.o ./rabit/src/engine_empty.o ./rabit/src/c_api.o -fopenmp -pthread -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/xgboost/libs
+** R
+** data
+** demo
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (xgboost)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'SuperLearner' ...
+** package 'SuperLearner' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (SuperLearner)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'drtmle' ...
+** package 'drtmle' successfully unpacked and MD5 sums checked
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (drtmle)
+
+The downloaded source packages are in
+	'/tmp/Rtmp6dU7oa/downloaded_packages'
+Warning messages:
+1: package 'glmnet' is not available (for R version 3.5.1) 
+2: In install.packages(c("R.utils", "Rcpp", "here", "remotes", "devtools",  :
+  installation of package 'remotes' had non-zero exit status
+3: In install.packages(c("R.utils", "Rcpp", "here", "remotes", "devtools",  :
+  installation of package 'data.table' had non-zero exit status
+R > 
+R > # from Bioconductor
+R > BiocManager::install(c("S4Vectors", "BiocGenerics", "BiocParallel",
+...                        "SummarizedExperiment", "limma", "biotmleData"),
+...                      lib = "/global/scratch/nhejazi/R",
+...                      update = FALSE)
+Bioconductor version 3.8 (BiocManager 1.30.10), R 3.5.1 (2018-07-02)
+Installing package(s) 'S4Vectors', 'BiocGenerics', 'BiocParallel',
+  'SummarizedExperiment', 'limma', 'biotmleData'
+trying URL 'https://bioconductor.org/packages/3.8/bioc/src/contrib/S4Vectors_0.20.1.tar.gz'
+Content type 'application/x-gzip' length 633420 bytes (618 KB)
+==================================================
+downloaded 618 KB
+
+trying URL 'https://bioconductor.org/packages/3.8/bioc/src/contrib/BiocGenerics_0.28.0.tar.gz'
+Content type 'application/x-gzip' length 45953 bytes (44 KB)
+==================================================
+downloaded 44 KB
+
+trying URL 'https://bioconductor.org/packages/3.8/bioc/src/contrib/BiocParallel_1.16.6.tar.gz'
+Content type 'application/x-gzip' length 933245 bytes (911 KB)
+==================================================
+downloaded 911 KB
+
+trying URL 'https://bioconductor.org/packages/3.8/bioc/src/contrib/SummarizedExperiment_1.12.0.tar.gz'
+Content type 'application/x-gzip' length 1487188 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+trying URL 'https://bioconductor.org/packages/3.8/bioc/src/contrib/limma_3.38.3.tar.gz'
+Content type 'application/x-gzip' length 1471609 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+trying URL 'https://bioconductor.org/packages/3.8/data/experiment/src/contrib/biotmleData_1.6.0.tar.gz'
+Content type 'application/x-gzip' length 32364661 bytes (30.9 MB)
+==================================================
+downloaded 30.9 MB
+
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'BiocGenerics' ...
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Creating a new generic function for 'append' in package 'BiocGenerics'
+Creating a new generic function for 'as.data.frame' in package 'BiocGenerics'
+Creating a new generic function for 'cbind' in package 'BiocGenerics'
+Creating a new generic function for 'rbind' in package 'BiocGenerics'
+Creating a new generic function for 'do.call' in package 'BiocGenerics'
+Creating a new generic function for 'duplicated' in package 'BiocGenerics'
+Creating a new generic function for 'anyDuplicated' in package 'BiocGenerics'
+Creating a new generic function for 'eval' in package 'BiocGenerics'
+Creating a new generic function for 'pmax' in package 'BiocGenerics'
+Creating a new generic function for 'pmin' in package 'BiocGenerics'
+Creating a new generic function for 'pmax.int' in package 'BiocGenerics'
+Creating a new generic function for 'pmin.int' in package 'BiocGenerics'
+Creating a new generic function for 'Reduce' in package 'BiocGenerics'
+Creating a new generic function for 'Filter' in package 'BiocGenerics'
+Creating a new generic function for 'Find' in package 'BiocGenerics'
+Creating a new generic function for 'Map' in package 'BiocGenerics'
+Creating a new generic function for 'Position' in package 'BiocGenerics'
+Creating a new generic function for 'get' in package 'BiocGenerics'
+Creating a new generic function for 'mget' in package 'BiocGenerics'
+Creating a new generic function for 'grep' in package 'BiocGenerics'
+Creating a new generic function for 'grepl' in package 'BiocGenerics'
+Creating a new generic function for 'is.unsorted' in package 'BiocGenerics'
+Creating a new generic function for 'lapply' in package 'BiocGenerics'
+Creating a new generic function for 'sapply' in package 'BiocGenerics'
+Creating a new generic function for 'lengths' in package 'BiocGenerics'
+Creating a new generic function for 'mapply' in package 'BiocGenerics'
+Creating a new generic function for 'match' in package 'BiocGenerics'
+Creating a new generic function for 'rowSums' in package 'BiocGenerics'
+Creating a new generic function for 'colSums' in package 'BiocGenerics'
+Creating a new generic function for 'rowMeans' in package 'BiocGenerics'
+Creating a new generic function for 'colMeans' in package 'BiocGenerics'
+Creating a new generic function for 'order' in package 'BiocGenerics'
+Creating a new generic function for 'paste' in package 'BiocGenerics'
+Creating a new generic function for 'rank' in package 'BiocGenerics'
+Creating a new generic function for 'rownames' in package 'BiocGenerics'
+Creating a new generic function for 'colnames' in package 'BiocGenerics'
+Creating a new generic function for 'union' in package 'BiocGenerics'
+Creating a new generic function for 'intersect' in package 'BiocGenerics'
+Creating a new generic function for 'setdiff' in package 'BiocGenerics'
+Creating a new generic function for 'sort' in package 'BiocGenerics'
+Creating a new generic function for 'table' in package 'BiocGenerics'
+Creating a new generic function for 'tapply' in package 'BiocGenerics'
+Creating a new generic function for 'unique' in package 'BiocGenerics'
+Creating a new generic function for 'unsplit' in package 'BiocGenerics'
+Creating a new generic function for 'var' in package 'BiocGenerics'
+Creating a new generic function for 'sd' in package 'BiocGenerics'
+Creating a new generic function for 'which' in package 'BiocGenerics'
+Creating a new generic function for 'which.max' in package 'BiocGenerics'
+Creating a new generic function for 'which.min' in package 'BiocGenerics'
+Creating a new generic function for 'IQR' in package 'BiocGenerics'
+Creating a new generic function for 'mad' in package 'BiocGenerics'
+Creating a new generic function for 'xtabs' in package 'BiocGenerics'
+Creating a new generic function for 'clusterCall' in package 'BiocGenerics'
+Creating a new generic function for 'clusterApply' in package 'BiocGenerics'
+Creating a new generic function for 'clusterApplyLB' in package 'BiocGenerics'
+Creating a new generic function for 'clusterEvalQ' in package 'BiocGenerics'
+Creating a new generic function for 'clusterExport' in package 'BiocGenerics'
+Creating a new generic function for 'clusterMap' in package 'BiocGenerics'
+Creating a new generic function for 'parLapply' in package 'BiocGenerics'
+Creating a new generic function for 'parSapply' in package 'BiocGenerics'
+Creating a new generic function for 'parApply' in package 'BiocGenerics'
+Creating a new generic function for 'parRapply' in package 'BiocGenerics'
+Creating a new generic function for 'parCapply' in package 'BiocGenerics'
+Creating a new generic function for 'parLapplyLB' in package 'BiocGenerics'
+Creating a new generic function for 'parSapplyLB' in package 'BiocGenerics'
+Creating a new generic function for 'basename' in package 'BiocGenerics'
+Creating a new generic function for 'dirname' in package 'BiocGenerics'
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (BiocGenerics)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'BiocParallel' ...
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking for shm_open in -lrt... yes
+configure: creating ./config.status
+config.status: creating src/Makevars
+** libs
+g++ -std=gnu++11 -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG  -I"/global/scratch/nhejazi/R/BH/include" -I/usr/local/include   -fpic  -g -O2 -c ipcmutex.cpp -o ipcmutex.o
+g++ -std=gnu++11 -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o BiocParallel.so ipcmutex.o -lrt -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/BiocParallel/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (BiocParallel)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'limma' ...
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c init.c -o init.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c normexp.c -o normexp.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c weighted_lowess.c -o weighted_lowess.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o limma.so init.o normexp.o weighted_lowess.o -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/limma/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (limma)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'biotmleData' ...
+** R
+** data
+*** moving datasets to lazyload DB
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (biotmleData)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'S4Vectors' ...
+** libs
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c AEbufs.c -o AEbufs.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c DataFrame_class.c -o DataFrame_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c Hits_class.c -o Hits_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c LLint_class.c -o LLint_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c List_class.c -o List_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c R_init_S4Vectors.c -o R_init_S4Vectors.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c Rle_class.c -o Rle_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c Rle_utils.c -o Rle_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c SEXP_utils.c -o SEXP_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c SimpleList_class.c -o SimpleList_class.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c anyMissing.c -o anyMissing.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c character_utils.c -o character_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c eval_utils.c -o eval_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c hash_utils.c -o hash_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c integer_utils.c -o integer_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c logical_utils.c -o logical_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c map_ranges_to_runs.c -o map_ranges_to_runs.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c safe_arithm.c -o safe_arithm.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c sort_utils.c -o sort_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c subsetting_utils.c -o subsetting_utils.o
+gcc -I"/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/include" -DNDEBUG   -I/usr/local/include   -fpic  -std=gnu99 -c vector_utils.c -o vector_utils.o
+gcc -shared -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -L/usr/local/lib64 -o S4Vectors.so AEbufs.o DataFrame_class.o Hits_class.o LLint_class.o List_class.o R_init_S4Vectors.o Rle_class.o Rle_utils.o SEXP_utils.o SimpleList_class.o anyMissing.o character_utils.o eval_utils.o hash_utils.o integer_utils.o logical_utils.o map_ranges_to_runs.o safe_arithm.o sort_utils.o subsetting_utils.o vector_utils.o -L/global/home/groups/consultsw/sl-7.x86_64/modules/r/3.5.1/lib64/R/lib -lR
+installing to /global/scratch/nhejazi/R/S4Vectors/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Creating a generic function for 'complete.cases' from package 'stats' in package 'S4Vectors'
+Creating a new generic function for 'expand.grid' in package 'S4Vectors'
+Creating a generic function for '%in%' from package 'base' in package 'S4Vectors'
+Creating a new generic function for 'findMatches' in package 'S4Vectors'
+Creating a generic function for 'setequal' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'as.factor' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'tabulate' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'cov' from package 'stats' in package 'S4Vectors'
+Creating a generic function for 'cor' from package 'stats' in package 'S4Vectors'
+Creating a generic function for 'smoothEnds' from package 'stats' in package 'S4Vectors'
+Creating a generic function for 'runmed' from package 'stats' in package 'S4Vectors'
+Creating a generic function for 'nchar' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'substr' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'substring' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'chartr' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'tolower' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'toupper' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'sub' from package 'base' in package 'S4Vectors'
+Creating a generic function for 'gsub' from package 'base' in package 'S4Vectors'
+in method for 'coerce' with signature '"data.table","DataFrame"': no definition for class "data.table"
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (S4Vectors)
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* installing *source* package 'SummarizedExperiment' ...
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+* DONE (SummarizedExperiment)
+
+The downloaded source packages are in
+	'/tmp/Rtmp6dU7oa/downloaded_packages'
+R > 
+R > # use remotes to install from GitHub
+R > remotes::install_github(c("nhejazi/biotmle@drtmle",
+...                           "tlverse/hal9001@master"),
+...                         lib = "/global/scratch/nhejazi/R")
+Skipping install of 'biotmle' from a github remote, the SHA1 (35795b21) has not changed since last install.
+  Use `force = TRUE` to force installation
+Skipping install of 'hal9001' from a github remote, the SHA1 (582d3547) has not changed since last install.
+  Use `force = TRUE` to force installation
+R > 
+R > # update all packages
+R > #update.packages(ask = FALSE, lib.loc = "/global/scratch/nhejazi/R")
+R > 
+> proc.time()
+   user  system elapsed 
+246.398  27.790 381.033 

@@ -1,0 +1,1409 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+* Project '~/projects/biotmle_meta/su2016plosone' loaded. [renv 0.14.0]
+> ################################################################################
+> # Apply biotmle to Subsampled Datasets
+> ################################################################################
+> 
+> # load packages from renv library
+> renv::activate(here::here())
+* Project '~/projects/biotmle_meta/su2016plosone' loaded. [renv 0.14.0]
+> 
+> # load required packages and scripts
+> library(here)
+here() starts at /global/home/users/philippe_boileau/projects/biotmle_meta/su2016plosone
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(readr)
+> library(limma)
+> library(minfi)
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from 'package:limma':
+
+    plotMA
+
+The following objects are masked from 'package:dplyr':
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+    as.data.frame, basename, cbind, colnames, dirname, do.call,
+    duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,
+    lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+    pmin.int, rank, rbind, rownames, sapply, setdiff, sort, table,
+    tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: S4Vectors
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:dplyr':
+
+    first, rename
+
+The following object is masked from 'package:base':
+
+    expand.grid
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following objects are masked from 'package:dplyr':
+
+    collapse, desc, slice
+
+Loading required package: GenomeInfoDb
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: 'matrixStats'
+
+The following object is masked from 'package:dplyr':
+
+    count
+
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: 'Biobase'
+
+The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians
+
+The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians
+
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: 'Biostrings'
+
+The following object is masked from 'package:base':
+
+    strsplit
+
+Loading required package: bumphunter
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: locfit
+locfit 1.5-9.4 	 2020-03-24
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+> library(biotmle)
+biotmle v1.17.1: Targeted Learning with Moderated Statistics for Biomarker
+Discovery
+> library(SuperLearner)
+Loading required package: nnls
+Loading required package: gam
+Loading required package: splines
+Loaded gam 1.20
+
+Super Learner
+Version: 2.0-28
+Package created on 2021-05-04
+
+> library(RhpcBLASctl)
+> source(here("R", "apply_biotmle.R"))
+> source(here("R", "subsample_biotmle.R"))
+> set.seed(7612452)
+> 
+> # explicitly load packages from SL library for renv awareness
+> library(earth)
+Loading required package: Formula
+Loading required package: plotmo
+Loading required package: plotrix
+Loading required package: TeachingDemos
+> library(glmnet)
+Loading required package: Matrix
+
+Attaching package: 'Matrix'
+
+The following object is masked from 'package:S4Vectors':
+
+    expand
+
+Loaded glmnet 4.1-2
+> library(ranger)
+> 
+> # disable multithreading
+> blas_set_num_threads(1L)
+> omp_set_num_threads(1L)
+> 
+> # load the prepped GenomicRatioSet
+> scratch_path <- "/global/scratch/users/philippe_boileau/su_et_al_data"
+> grs <- read_rds(here(scratch_path, "prepared-grs.Rds"))
+> 
+> # number of subsamples per sample size
+> n_subsamples <- 10 
+> 
+> # 25% (63 observations)
+> p25_subsample_ls <- lapply(
++   seq_len(n_subsamples),
++   function(idx) {subsample_biotmle(grs, sample_prop = 0.25)}
++ )
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+Error in lognet(xd, is.sparse, ix, jx, y, weights, offset, alpha, nobs,  : 
+  one multinomial or binomial class has 1 or 0 observations; not allowed
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |======                                                                |   8%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============                                                          |  17%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==================                                                    |  25%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================                                               |  33%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  42%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  58%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================                       |  67%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |====================================================                  |  75%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========================================================            |  83%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  92%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   7%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========                                                             |  13%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==============                                                        |  20%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================                                               |  33%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================                                          |  40%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=================================                                     |  47%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=====================================                                 |  53%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========================================                            |  60%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================                       |  67%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |========================================================              |  80%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================================         |  87%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=================================================================     |  93%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |====================                                                  |  29%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==============================                                        |  43%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |========================================                              |  57%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==================================================                    |  71%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |====================================================                  |  75%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |=========                                                             |  12%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==================                                                    |  25%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========================                                            |  38%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================                          |  62%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |====================================================                  |  75%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================================         |  88%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==============                                                        |  20%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=====================                                                 |  30%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================                                          |  40%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========================================                            |  60%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=================================================                     |  70%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |========================================================              |  80%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================================       |  90%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======                                                               |  11%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===========                                                           |  16%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============                                                       |  21%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==================                                                    |  26%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========================                                            |  37%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  42%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=================================                                     |  47%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=====================================                                 |  53%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  58%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================                          |  63%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |====================================================                  |  74%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================================================               |  79%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===========================================================           |  84%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================================       |  89%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==================================================================    |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |========                                                              |  11%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  22%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================                                               |  33%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================                                       |  44%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================================                               |  56%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================                       |  67%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  78%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==============================================================        |  89%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |========                                                              |  11%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  22%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================                                               |  33%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================                                       |  44%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=======================================                               |  56%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===============================================                       |  67%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  78%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==============================================================        |  89%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+> 
+> # 50% (127 observations)
+> p50_subsample_ls <- lapply(
++   seq_len(n_subsamples),
++   function(idx) {subsample_biotmle(grs, sample_prop = 0.50)}
++ )
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+> 
+> # 75% (190 observations)
+> p75_subsample_ls <- lapply(
++   seq_len(n_subsamples),
++   function(idx) {subsample_biotmle(grs, sample_prop = 0.75)}
++ )
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+  |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======                                                                |   9%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |==========                                                            |  14%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============                                                         |  18%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================                                                      |  23%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================                                                   |  27%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================                                                |  32%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================                                             |  36%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================                                         |  41%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================                                      |  45%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================                                   |  50%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================                                |  55%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================                             |  59%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=============================================                         |  64%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================                      |  68%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================                   |  73%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================                |  77%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |=========================================================             |  82%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |============================================================          |  86%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |================================================================      |  91%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |===================================================================   |  95%Loading required package: quadprog
+Loading required package: nloptr
+  |                                                                              |======================================================================| 100%
+Loading required package: quadprog
+Loading required package: nloptr
+
+> 
+> # save the results
+> write_rds(p25_subsample_ls, file = here("results", "p25-subsample-ls.Rds"))
+> write_rds(p50_subsample_ls, file = here("results", "p50-subsample-ls.Rds"))
+> write_rds(p75_subsample_ls, file = here("results", "p75-subsample-ls.Rds"))
+> 
+> proc.time()
+      user     system    elapsed 
+143154.420   6603.037   9614.031 

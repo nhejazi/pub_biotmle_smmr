@@ -1,0 +1,4 @@
+*.Rproj.*
+data/GSE*
+data/prepared-grs.Rds
+slurm.out

@@ -1,0 +1,281 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+* Project '~/projects/biotmle_meta/su2016plosone' loaded. [renv 0.14.0]
+> ################################################################################
+> # Prepare Su et al. Data #######################################################
+> ################################################################################
+> 
+> # Data pertaining to the epigenetic effects of tobacco smoking on whole blood
+> # from Su et al. is prepared for analysis in this script. See
+> # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0166486 for
+> # more background. The GEO series number is GSE85210.
+> 
+> # load packages from renv library
+> renv::activate(project = here::here())
+* Project '~/projects/biotmle_meta/su2016plosone' loaded. [renv 0.14.0]
+> 
+> # load the required packages
+> library(here)
+here() starts at /global/home/users/philippe_boileau/projects/biotmle_meta/su2016plosone
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(readr)
+> library(readxl)
+> library(stringr)
+> library(minfi)
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from 'package:dplyr':
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+    as.data.frame, basename, cbind, colnames, dirname, do.call,
+    duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,
+    lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+    pmin.int, rank, rbind, rownames, sapply, setdiff, sort, table,
+    tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: S4Vectors
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:dplyr':
+
+    first, rename
+
+The following object is masked from 'package:base':
+
+    expand.grid
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following objects are masked from 'package:dplyr':
+
+    collapse, desc, slice
+
+Loading required package: GenomeInfoDb
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: 'matrixStats'
+
+The following object is masked from 'package:dplyr':
+
+    count
+
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: 'Biobase'
+
+The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians
+
+The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians
+
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: 'Biostrings'
+
+The following object is masked from 'package:base':
+
+    strsplit
+
+Loading required package: bumphunter
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: locfit
+locfit 1.5-9.4 	 2020-03-24
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+> library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+> library(GEOquery)
+> 
+> # path to scratch directory
+> scratch_path <- "/global/scratch/users/philippe_boileau/su_et_al_data/"
+> 
+> # download the normalized beta values
+> # scp'ed it from local computer to scratch due to download timeout
+> #getGEOSuppFiles(
+>   #"GSE85210",
+>   #filter_regex = "*Matrix_processed*",
+>   #baseDir = scratch_path
+> #)
+> betas <- gzfile(
++   description = here(
++     scratch_path, "GSE85210", "GSE85210_Matrix_processed.txt.gz"
++   )
++ ) %>% read_table(col_names = FALSE, skip = 2)
+
+-- Column specification --------------------------------------------------------
+cols(
+  .default = col_double(),
+  X1 = col_character()
+)
+i Use `spec()` for the full column specifications.
+
+> 
+> # extract the colnames (they are poorly formatted, causing issues)
+> colnames_betas <- gzfile(
++   description = here(
++     scratch_path, "GSE85210", "GSE85210_Matrix_processed.txt.gz"
++   )
++ ) %>%
++   read_tsv() %>%
++   colnames()
+New names:
+* `Detection Pval` -> `Detection Pval...3`
+* `Detection Pval` -> `Detection Pval...5`
+* `Detection Pval` -> `Detection Pval...7`
+* `Detection Pval` -> `Detection Pval...9`
+* `Detection Pval` -> `Detection Pval...11`
+* ...
+Rows: 472679 Columns: 506
+-- Column specification --------------------------------------------------------
+Delimiter: "\t"
+chr   (6): ID_REF, SE1218, Detection Pval...3, SE1603, Detection Pval...5, S...
+dbl (500): SE1519, Detection Pval...7, SE09501, Detection Pval...9, SE1467, ...
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> colnames(betas) <- colnames_betas
+> betas <- betas[, -507]
+> betas <- betas %>% dplyr::select(!contains("Detection Pval"))
+> rownames_betas <- betas$ID_REF
+> betas <- betas[, -1] %>% as.matrix()
+> rownames(betas) <- rownames_betas
+> 
+> # load the separately provided metadata (cell type composition, covariates)
+> su_metadata <- read_xlsx(
++   path = here("data", "se-smokers-metadata-for-phillipe.xlsx")
++ ) %>%
++   mutate(
++     sample_name = Sample_Name1,
++     smoking_status = if_else(
++       `Sample_Group Never=0 Ever=1` == 0, "never", "ever"
++     ),
++     smoking_status = factor(smoking_status, levels = c("never", "ever")),
++     sex = if_else(`sex M=1 F=2` == 1, "male", "female"),
++     sex = factor(sex, levels = c("male", "female")),
++     race = if_else(`race W=1, B=2` == 1, "white", "black"),
++     race = factor(race, levels = c("white", "black")),
++     pack_years = `pack-years`
++   ) %>%
++   select(
++     sample_name, sex, race, age, smoking_status, pack_years,
++     CD8T, CD4T, NK, Bcell, Mono, Gran
++   ) %>%
++   as.data.frame()
+> rownames(su_metadata) <- su_metadata$sample_name
+> 
+> # extract the metadata from GEO
+> # commented out on slurm due to download timeout -- only usedto check for
+> # sample data missmatching, which is confirmed not to be an issue when run
+> # locally
+> 
+> # Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 10)
+> # geo_metadata <- getGEO("GSE85210")$GSE85210_series_matrix.txt.gz
+> 
+> # check for sample missmatching
+> # geo_pheno_data <- pData(geo_metadata) %>%
+> #   as.data.frame() %>%
+> #   mutate(sample_name = str_extract(title, "SE(.*)"))
+> # meta_sample_order <- order(geo_pheno_data$sample_name, su_metadata$sample_name)
+> # geo_pheno_data <- geo_pheno_data[meta_sample_order, ]
+> # stopifnot(
+> #   identical(if_else(
+> #     geo_pheno_data$`subject status:ch1` == "smoker", "ever", "never"),
+> #     as.character(su_metadata$smoking_status)
+> #   )
+> # )
+> 
+> # create a single genomic ratio set
+> betas_order <- order(colnames(betas), su_metadata$sample_name)
+> betas <- betas[, betas_order]
+> grs <- makeGenomicRatioSetFromMatrix(
++   betas, rownames = rownames(betas), pData = su_metadata,
++   array = "IlluminaHumanMethylation450k", what = "Beta"
++ )
+> 
+> # save the genomic ratio set
+> write_rds(grs, file = here(scratch_path, "prepared-grs.Rds"))
+> 
+> proc.time()
+   user  system elapsed 
+155.931  15.820 181.126 
